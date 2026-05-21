@@ -1,11 +1,11 @@
 import {Pool} from 'pg'
 import config from '../config/index.js'
 
-const pool = new Pool({
+export const pool = new Pool({
     connectionString: config.db_connection_string,
 })
 
-const initDB = async () => {
+export const initDB = async () => {
     try {
         // await pool.query(
         //     `
