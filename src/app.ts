@@ -1,6 +1,7 @@
 import express from 'express'
 import type { Request, Response, NextFunction, Express } from 'express';
 import authRouter from './modules/auth/auth.route.js'
+import issueRouter from './modules/issue/issue.route.js'
 import { authenticate, authorize } from './middlewares/auth.js';
 
 const app: Express = express();
@@ -10,6 +11,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.text());
 
 app.use('/api/auth', authRouter);
+app.use('/api/issues', issueRouter);
 
 app.use(authenticate);
 app.use(authorize("maintainer"));
