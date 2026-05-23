@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express"
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import config from "../config/index.js";
+import isOwnOpenIssue from "../utils/isOwnOpenIssue.js";
 
 declare global {
     namespace Express {
@@ -34,11 +35,24 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
     }
 }
 
-export const authorize = (...roles: string[]) => (req: Request, res: Response, next: NextFunction) => {
+export const authorize = (...roles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
         try {
+
+            const method = req.method;
+            const issue_id = Number(req.params.id);
+
+            if (method === "PATCH" && req.user?.role === "contributor") {
+                let isValidUser = await isOwnOpenIssue(issue_id, req.user?.id);
+
+                if (isValidUser) {
+                    return next();
+                }
+            }
+
+
             const {role} = req.user as JwtPayload;
             if (!roles.includes(role)) {
-                res.status(403).json({
+                return res.status(403).json({
                     success: false,
                     message: "Unauthorized access",
                     errors: {},
