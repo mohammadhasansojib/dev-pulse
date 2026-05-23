@@ -9,11 +9,11 @@ export const successResponse = (data: SuccessDataType, message: string) => {
     }
 }
 
-export const errorResponse = (error: any) => {
+export const errorResponse = (errors: any) => {
     return {
         success: false,
-        message: error.message,
-        error,
+        message: errors.message,
+        errors,
     }
 }
 
