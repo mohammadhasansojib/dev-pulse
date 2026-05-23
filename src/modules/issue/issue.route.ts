@@ -10,13 +10,12 @@ const USER_ROLES = {
     contributor: "contributor",
 } as const;
 
-router.use(authenticate);
-
-
-router.post('/', authorize(USER_ROLES.maintainer, USER_ROLES.contributor), issueController.createIssue);
-
 router.get('/', issueController.getAllIssues);
 router.get('/:id', issueController.getSingleIssue);
+
+router.use(authenticate);
+
+router.post('/', authorize(USER_ROLES.maintainer, USER_ROLES.contributor), issueController.createIssue);
 
 router.patch('/:id', authorize(USER_ROLES.maintainer), issueController.updateIssue);
 router.delete('/:id', authorize(USER_ROLES.maintainer), issueController.deleteIssue);
