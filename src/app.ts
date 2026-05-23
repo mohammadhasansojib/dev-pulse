@@ -3,8 +3,11 @@ import type { Request, Response, NextFunction, Express } from 'express';
 import authRouter from './modules/auth/auth.route.js'
 import issueRouter from './modules/issue/issue.route.js'
 import { authenticate, authorize } from './middlewares/auth.js';
+import cors from 'cors'
 
 const app: Express = express();
+
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
